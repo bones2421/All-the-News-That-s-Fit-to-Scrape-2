@@ -100,17 +100,17 @@ app.get("/all", function (req, res) {
 });
 
 
-
+//title route 
 app.get("/title", function(req, res) {
  
-  db.scrapedData.find().sort({ name: 1 }, function(error, found) {
+  db.scrapedData.find().sort({ title: 1 }, function(error, found) {
     // Log any errors if the server encounters one
     if (error) {
       console.log(error);
     }
     // Otherwise, send the result of this query to the browser
     else {
-      res.json(found);
+      res.send(found);
     }
   });
 });

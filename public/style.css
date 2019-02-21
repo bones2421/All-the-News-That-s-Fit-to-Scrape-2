@@ -2,4 +2,7 @@
     color: #ee6e73;
     font-weight: 300;
   }
-  
+  img {
+    height: 200px;
+    width: 300px;
+  }
