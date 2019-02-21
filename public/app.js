@@ -1,4 +1,6 @@
 
+
+
 $.getJSON("/all", function(data){
   console.log(data);
   for (var i = 0; i < data.length; i++){
@@ -16,7 +18,9 @@ function setActive(selector) {
   $(selector).addClass("active");
 }
 
-$("#more-arcticles").on('click', function(){
+$("#more-articles").on('click', function(){
+ console.log("ive been clicked")
+ $("#tbody").empty();
   $.get('/scrape')
   .then(function(response){
     location.reload()
