@@ -59,18 +59,31 @@ app.get("/scrape", function (req, res) {
         var summary = $(element)
           .find("p").text();
 
-        // Save these results in an object that we'll push into the results array we defined earlier
-        results.push({
+       // If this found element had both a title and a link
+       if (title && link && image && summary) {
+        // Insert the data in the scrapedData db
+        db.scrapedData.insert({
           title: title,
           link: link,
           image: image,
-          summary: summary 
+          summary: summary
+        },
+        function(err, inserted) {
+          if (err) {
+            // Log the error if one is encountered during the query
+            console.log(err);
+          }
+          else {
+            // Otherwise, log the inserted data
+            console.log(inserted);
+          }
         });
+      }
       });
 
       // Log the results once you've looped through each of the elements found with cheerio
       console.log(results);
-      // db.articles.insert(results);
+     
     })
 });
 
@@ -85,6 +98,26 @@ app.get("/all", function (req, res) {
     }
   });
 });
+
+
+
+app.get("/title", function(req, res) {
+ 
+  db.scrapedData.find().sort({ name: 1 }, function(error, found) {
+    // Log any errors if the server encounters one
+    if (error) {
+      console.log(error);
+    }
+    // Otherwise, send the result of this query to the browser
+    else {
+      res.json(found);
+    }
+  });
+});
+
+
+
+
 
 app.listen(3000, function () {
   console.log("App running on port 3000!");
