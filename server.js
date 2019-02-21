@@ -86,7 +86,7 @@ app.get("/", function (req, res) {
      
     })
     .then(function(res, err){
-      res.render("index");
+      err.render("index");
     })
 });
 
