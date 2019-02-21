@@ -24,12 +24,12 @@ db.on("error", function (error) {
 });
 
 // Main route, render index.handlebars
-app.get("/", function(req, res) {
-  res.render("index");
-})
+// app.get("/", function(req, res) {
+//   res.render("index");
+// })
 
 // Make a request via axios to grab the HTML body from the site of your choice
-app.get("/scrape", function (req, res) {
+app.get("/", function (req, res) {
 
   axios
     .get("https://kotaku.com/")
@@ -85,8 +85,8 @@ app.get("/scrape", function (req, res) {
       console.log(results);
      
     })
-    .then(function(res){
-      res.send()
+    .then(function(res, err){
+      res.render("index");
     })
 });
 
