@@ -18,14 +18,14 @@ function setActive(selector) {
   $(selector).addClass("active");
 }
 
-$("#more-articles").on('click', function(){
- console.log("ive been clicked")
- $("#tbody").empty();
-  $.get('/scrape')
-  .then(function(response){
-    location.reload()
-  })
-})
+// $("#more-articles").on('click', function(){
+//  console.log("ive been clicked")
+//  $("#tbody").empty();
+//   $.get('/scrape')
+//   .then(function(response){
+//     location.reload()
+//   })
+// })
 
 
 
