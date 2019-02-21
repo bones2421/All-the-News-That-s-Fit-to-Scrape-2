@@ -85,6 +85,9 @@ app.get("/scrape", function (req, res) {
       console.log(results);
      
     })
+    .then(function(res){
+      res.send()
+    })
 });
 
 
