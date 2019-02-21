@@ -8,6 +8,7 @@ var cheerio = require("cheerio");
 
 // Initialize Express
 var app = express();
+app.use(express.static("public"));
 
 // Set Handlebars as the default templating engine.
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));

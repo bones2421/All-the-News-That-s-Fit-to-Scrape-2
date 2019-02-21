@@ -16,22 +16,21 @@ $.getJSON("/all", function(data){
   }
   
 
+
+//   $("#headline-sort").on("click", function(){
+//     $("#tbody").empty();
+//     setActive("#title");
   
+//     $.getJSON("/title", function(data){
+//       console.log(data);
+//       for (var i = 0; i < data.length; i ++) {
+//         $("#tbody").append("<tr><td>" + data[i].title + "</td>" +
+//         "<td>" + data[i].link + "</td>" +
+//         "<td>" + data[i].image + "</td>" + 
+//         "<td>" + data[i].summary + "</td></tr>");
+//       }
+//     })
   
-  $("#headline-sort").on("click", function(){
-    $("#tbody").empty();
-    setActive("#title");
-  
-    $.getJSON("/title", function(data){
-      console.log(data);
-      for (var i = 0; i < data.length; i ++) {
-        $("#tbody").append("<tr><td>" + data[i].title + "</td>" +
-        "<td>" + data[i].link + "</td>" +
-        "<td>" + data[i].image + "</td>" + 
-        "<td>" + data[i].summary + "</td></tr>");
-      }
-    })
-  
-  });
+//   });
   
   
