@@ -14,7 +14,7 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Database configuration
-var databaseUrl = process.env.MONGODB_URI || "scraper";
+var databaseUrl = process.env.MONGODB_URI;
 var collections = ["scrapedData"];
 
 // Hook mongojs configuration to the db variable
