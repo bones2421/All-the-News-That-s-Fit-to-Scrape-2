@@ -16,12 +16,12 @@ function setActive(selector) {
   $(selector).addClass("active");
 }
 
-// $("#more-arcticles").on('click', function(){
-//   $.get('/scrape')
-//   .then(function(response){
-//     location.reload()
-//   })
-// })
+$("#more-arcticles").on('click', function(){
+  $.get('/scrape')
+  .then(function(response){
+    location.reload()
+  })
+})
 
 
 

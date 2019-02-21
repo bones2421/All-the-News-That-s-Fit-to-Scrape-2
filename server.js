@@ -24,12 +24,12 @@ db.on("error", function (error) {
 });
 
 // Main route, render index.handlebars
-// app.get("/", function(req, res) {
-//   res.render("index");
-// })
+app.get("/", function(req, res) {
+  res.render("index");
+})
 
 // Make a request via axios to grab the HTML body from the site of your choice
-app.get("/", function (req, res) {
+app.get("/scrape", function (req, res) {
 
   axios
     .get("https://kotaku.com/")
@@ -84,9 +84,6 @@ app.get("/", function (req, res) {
       // Log the results once you've looped through each of the elements found with cheerio
       console.log(results);
      
-    })
-    .then(function(res, err){
-      err.render("index");
     })
 });
 
