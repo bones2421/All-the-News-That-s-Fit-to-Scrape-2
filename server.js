@@ -1,14 +1,13 @@
 // Dependencies
-var express = require("express");
 var mongojs = require("mongojs");
-var exphbs = require('express-handlebars');
-// Require axios and cheerio. This makes the scraping possible
-var axios = require("axios");
 var cheerio = require("cheerio");
+var axios = require("axios");
+var express = require("express");
+var exphbs = require('express-handlebars');
 
-// Initialize Express
 var app = express();
 app.use(express.static("public"));
+
 
 // Set Handlebars as the default templating engine.
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
@@ -20,7 +19,7 @@ var collections = ["scrapedData"];
 
 // Hook mongojs configuration to the db variable
 var db = mongojs(databaseUrl, collections);
-db.on("error", function(error) {
+db.on("error", function (error) {
   console.log("Database Error:", error);
 });
 
@@ -29,92 +28,64 @@ app.get("/", function(req, res) {
   res.render("index");
 })
 
+// Make a request via axios to grab the HTML body from the site of your choice
+app.get("/scrape", function (req, res) {
 
+  axios
+    .get("https://kotaku.com/")
+    .then(function (response) {
+      // Load the HTML into cheerio and save it to a variable
+      // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+      var $ = cheerio.load(response.data);
 
-// Retrieve data from the db
-app.get("/all", function(req, res) {
-  // Find all results from the scrapedData collection in the db
-  db.scrapedData.find({}, function(error, found) {
-    // Throw any errors to the console
-    if (error) {
-      console.log(error);
-    }
-    // If there are no errors, send the data to the browser as json
-    else {
-      res.json(found);
-    }
-  });
-});
+      // An empty array to save the data that we'll scrape
+      var results = [];
 
-// Scrape data from one site and place it into the mongodb db
-app.get("/scrape", function(req, res) {
-  // Make a request via axios for the news section of `ycombinator`
-  axios.get("https://kotaku.com/").then(function(response) {
-    // Load the html body from axios into cheerio
-    var $ = cheerio.load(response.data);
-    // For each element with a "title" class
-    $("article").each(function(i, element) {
-      // Save the text and href of each link enclosed in the current element
-      var title = $(element).find("h1").children("a").text();
-      var link = $(element).find("h1").children("a").attr("href");
-      var image = $(element).find("source").attr("data-srcset");
-      var summary = $(element).find("p").text();
+      // Select each element in the HTML body from which you want information.
+      // NOTE: Cheerio selectors function similarly to jQuery's selectors,
+      // but be sure to visit the package's npm page to see how it works
+      $("article").each(function (i, element) {
+        var title = $(element)
+          .find("h1")
+          .children("a")
+          .text();
+        var link = $(element)
+          .find("h1")
+          .children("a")
+          .attr("href");
+        var image = $(element)
+          .find("source")
+          .attr("data-srcset");
+        var summary = $(element)
+          .find("p").text();
 
-      // If this found element had both a title and a link
-      if (title && link && image && summary) {
-        // Insert the data in the scrapedData db
-        db.scrapedData.insert({
+        // Save these results in an object that we'll push into the results array we defined earlier
+        results.push({
           title: title,
           link: link,
           image: image,
-          summary: summary
-        },
-        function(err, inserted) {
-          if (err) {
-            // Log the error if one is encountered during the query
-            console.log(err);
-          }
-          else {
-            // Otherwise, log the inserted data
-            console.log(inserted);
-          }
+          summary: summary 
         });
-      }
-    });
-  });
+      });
 
-  // Send a "Scrape Complete" message to the browser
-  res.send("Scrape Complete");
+      // Log the results once you've looped through each of the elements found with cheerio
+      console.log(results);
+      // db.articles.insert(results);
+    })
 });
 
 
-///sort by headline
-app.get("/title", function(req, res) {
-  // Query: In our database, go to the animals collection, then "find" everything,
-  // but this time, sort it by name (1 means ascending order)
-  db.scrapedData.find().sort({ title: 1 }, function(error, found) {
-    // Log any errors if the server encounters one
-    if (error) {
-      console.log(error);
-    }
-    // Otherwise, send the result of this query to the browser
-    else {
-      res.json(found);
+// route 1
+app.get("/all", function (req, res) {
+  db.scrapedData.find({}, function (err, found) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.json(found)
     }
   });
 });
 
-
-
-
-
-
-
-
-
-
-
-// Listen on port 3000
-app.listen(3000, function() {
+app.listen(3000, function () {
   console.log("App running on port 3000!");
 });
