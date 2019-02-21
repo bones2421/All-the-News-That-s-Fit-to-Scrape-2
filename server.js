@@ -14,11 +14,10 @@ app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Database configuration
-var databaseUrl = process.env.MONGODB_URI;
 var collections = ["scrapedData"];
 
 // Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
+var db = mongojs(process.env.MONGODB_URI || 'scraper', collections);
 db.on("error", function (error) {
   console.log("Database Error:", error);
 });
