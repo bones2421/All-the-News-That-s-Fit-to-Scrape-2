@@ -16,6 +16,13 @@ function setActive(selector) {
   $(selector).addClass("active");
 }
 
+$("#more-arcticles").on('click', function(){
+  $.get('/scrape')
+  .then(function(response){
+    location.reload()
+  })
+})
+
 
 
 $("#headline-sort").on("click", function(){
