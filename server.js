@@ -61,13 +61,15 @@ app.get("/scrape", function (req, res) {
 
        // If this found element had both a title and a link
        if (title && link && image && summary) {
+
+        
         // Insert the data in the scrapedData db
         db.scrapedData.insert({
           title: title,
           link: link,
           image: image,
           summary: summary
-        },
+        }, 
         function(err, inserted) {
           if (err) {
             // Log the error if one is encountered during the query
@@ -75,6 +77,7 @@ app.get("/scrape", function (req, res) {
           }
           else {
             // Otherwise, log the inserted data
+            console.log("scrapedData")
             console.log(inserted);
           }
         });
