@@ -31,6 +31,8 @@ app.get("/", function(req, res) {
 // Make a request via axios to grab the HTML body from the site of your choice
 app.get("/scrape", function (req, res) {
 
+  db.scrapedData.drop()
+
   axios
     .get("https://kotaku.com/")
     .then(function (response) {
