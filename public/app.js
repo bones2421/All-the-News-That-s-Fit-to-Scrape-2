@@ -1,9 +1,9 @@
 // function displayResults(scrapedData) {
 //   // First, empty the table
 //   $("#tbody").empty();
-//   // Then, for each entry of that json...
+//   // Then, for each entry of json...
 //   scrapedData.forEach(function(articles) {
-//     // Append each property to the table
+//     // Append each property to table
 //     var tr = $("<tr>").append(
 //       $("<td>").text(articles.title),
 //       $("<td>").text(articles.link),

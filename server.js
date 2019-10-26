@@ -6,18 +6,18 @@ var express = require("express");
 var exphbs = require('express-handlebars');
 
 var app = express();
-var PORT = process.env.PORT || 3000
+var PORT = process.env.PORT || 3000;
 app.use(express.static("public"));
 
 
-// Set Handlebars as the default templating engine.
+// Set Handlebars as default templating engine.
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 // Database configuration
 var collections = ["scrapedData"];
 
-// Hook mongojs configuration to the db variable
+// Hook mongojs configuration to db variable
 var db = mongojs(process.env.MONGODB_URI || 'scraper', collections);
 db.on("error", function (error) {
   console.log("Database Error:", error);
@@ -26,26 +26,26 @@ db.on("error", function (error) {
 // Main route, render index.handlebars
 app.get("/", function(req, res) {
   res.render("index");
-})
+});
 
-// Make a request via axios to grab the HTML body from the site of your choice
+// Make request via axios to grab HTML body from site of your choice
 app.get("/scrape", function (req, res) {
 
-  db.scrapedData.drop()
+  db.scrapedData.drop();
 
   axios
     .get("https://kotaku.com/")
     .then(function (response) {
-      // Load the HTML into cheerio and save it to a variable
+      // Load HTML into cheerio and save it to variable
       // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
       var $ = cheerio.load(response.data);
 
-      // An empty array to save the data that we'll scrape
+      //empty array to save data we'll scrape
       var results = [];
 
-      // Select each element in the HTML body from which you want information.
+      // Select each element in HTML body from which you want info.
       // NOTE: Cheerio selectors function similarly to jQuery's selectors,
-      // but be sure to visit the package's npm page to see how it works
+      //be sure to visit the package's npm page to see how it works
       $("article").each(function (i, element) {
         var title = $(element)
           .find("h1")
@@ -61,11 +61,11 @@ app.get("/scrape", function (req, res) {
         var summary = $(element)
           .find("p").text();
 
-       // If this found element had both a title and a link
+       // If this found element had both title and link
        if (title && link && image && summary) {
 
         
-        // Insert the data in the scrapedData db
+        // Insert data in scrapedData db
         db.scrapedData.insert({
           title: title,
           link: link,
@@ -74,21 +74,21 @@ app.get("/scrape", function (req, res) {
         }, 
         function(err, inserted) {
           if (err) {
-            // Log the error if one is encountered during the query
+            // Log error if one is encountered during query
             console.log(err);
           }
           else {
-            // Otherwise, log the inserted data
-            console.log("scrapedData")
+            // Otherwise, log inserted data
+            console.log("scrapedData");
             console.log(inserted);
           }
         });
       }
       });
 
-      // Log the results once you've looped through each of the elements found with cheerio
+      // Log results once looped through each element found with cheerio
       console.log(results);
-    })
+    });
 });
 
 
@@ -96,9 +96,9 @@ app.get("/scrape", function (req, res) {
 app.get("/all", function (req, res) {
   db.scrapedData.find({}, function (err, found) {
     if (err) {
-      console.log(err)
+      console.log(err);
     } else {
-      res.json(found)
+      res.json(found);
     }
   });
 });
@@ -108,11 +108,11 @@ app.get("/all", function (req, res) {
 app.get("/title", function(req, res) {
  
   db.scrapedData.find().sort({ title: 1 }, function(error, found) {
-    // Log any errors if the server encounters one
+    // Log any errors if server encounters one
     if (error) {
       console.log(error);
     }
-    // Otherwise, send the result of this query to the browser
+    // Otherwise, send result of query to browser
     else {
       res.send(found);
     }
